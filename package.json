@@ -2,12 +2,12 @@
   "name": "2fa-authentication",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/src/server.js",
+  "main": "dist/server.js",
   "scripts": {
     "build": "npx tsc",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "start": "node dist/src/server.js",
+    "start": "node dist/server.js",
     "dev": "nodemon --files src/server.ts "
   },
   "keywords": [],
