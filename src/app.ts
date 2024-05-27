@@ -5,6 +5,7 @@ import userRoutes from "./routes/user.routes";
 import connectDB from "./databases";
 import logger from "./services/logger";
 import { swaggerUi, specs } from "./swagger";
+import { rateLimiter } from "./middlewares/rateLimiter.middlewares";
 
 dotenv.config();
 
@@ -46,6 +47,8 @@ app.use((req, res, next) => {
   next();
 });
 app.use(express.json());
+
+app.use(rateLimiter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(httpLogger);

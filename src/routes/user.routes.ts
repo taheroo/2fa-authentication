@@ -1,6 +1,7 @@
 import express from "express";
 import * as UserControllers from "../controllers/user.controllers";
 import { authMiddleware } from "../middlewares/auth.middlewares";
+import { requestOtpLimiter } from "../middlewares/rateLimiter.middlewares";
 
 /**
  * @swagger
@@ -156,7 +157,7 @@ router.put("/update", authMiddleware, UserControllers.updateUser);
  *       404:
  *         description: User not found
  */
-router.post("/request-otp", UserControllers.requestOtp);
+router.post("/request-otp", requestOtpLimiter, UserControllers.requestOtp);
 /**
  * @swagger
  * /api/users/change-password:
