@@ -15,6 +15,10 @@ const options = {
         url: `http://localhost:${PORT}`,
         description: "Development server",
       },
+      {
+        url: "https://api.scanmeet.com",
+        description: "Production server",
+      },
     ],
     components: {
       securitySchemes: {
