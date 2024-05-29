@@ -64,7 +64,7 @@ export const createUser = async (req: Request, res: Response) => {
     if (e.code === MONGO_ERROR_CODES.DUPLICATE_KEY) {
       res.status(409).send("A user with the same email/mobile already exists.");
     } else {
-      res.status(400).send(e);
+      res.status(500).json({ message: "Server error" });
     }
   }
 };
@@ -127,7 +127,12 @@ export const updateUser = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json({ message: "User updated successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    const e = error as MongoDBError;
+    if (e.code === MONGO_ERROR_CODES.DUPLICATE_KEY) {
+      res.status(409).send("A user with the same email/mobile already exists.");
+    } else {
+      res.status(500).json({ message: "Server error" });
+    }
   }
 };
 
