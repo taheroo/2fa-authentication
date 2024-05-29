@@ -63,9 +63,12 @@ router.post("/", UserControllers.createUser);
  *                 type: string
  *               otp:
  *                 type: string
+ *               password:
+ *                 type: string
  *             required:
  *               - email
  *               - otp
+ *               - password
  *     responses:
  *       200:
  *         description: OTP verified successfully
@@ -173,12 +176,15 @@ router.post("/request-otp", requestOtpLimiter, UserControllers.requestOtp);
  *             properties:
  *               mobile:
  *                 type: string
+ *               oldPassword:
+ *                 type: string
  *               newPassword:
  *                 type: string
  *               otp:
  *                 type: string
  *             required:
  *               - mobile
+ *               - oldPassword
  *               - newPassword
  *               - otp
  *     responses:

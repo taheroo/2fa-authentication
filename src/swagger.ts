@@ -1,6 +1,6 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import { PORT } from "./constants";
+import { SWAGGER_URL } from "./constants";
 
 const options = {
   definition: {
@@ -12,12 +12,7 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`,
-        description: "Development server",
-      },
-      {
-        url: "https://api.scanmeet.com",
-        description: "Production server",
+        url: SWAGGER_URL,
       },
     ],
     components: {

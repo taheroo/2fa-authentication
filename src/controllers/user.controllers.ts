@@ -75,9 +75,15 @@ export const verifyOtp = async (req: Request, res: Response) => {
     if (error) {
       return res.status(400).send(error.format());
     }
-    const isCorrectOtp = await UserServices.verifyOtp(data.email, data.otp);
+    const isCorrectOtp = await UserServices.verifyOtp(
+      data.email,
+      data.password,
+      data.otp
+    );
     if (!isCorrectOtp) {
-      return res.status(400).json({ message: "Invalid or expired OTP" });
+      return res
+        .status(400)
+        .json({ message: "Invalid OTP/Password or expired OTP" });
     }
     const user = await UserServices.verifyAccount(data.email);
     if (!user) {
@@ -89,7 +95,7 @@ export const verifyOtp = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-// TODO: implement 2fa correctly
+
 export const login = async (req: Request, res: Response) => {
   try {
     const { data, error } = loginSchema.safeParse(req.body);
@@ -163,9 +169,15 @@ export const changePassword = async (req: Request, res: Response) => {
     if (error) {
       return res.status(400).send(error.format());
     }
-    const isCorrectOtp = await UserServices.verifyOtp(data.mobile, data.otp);
+    const isCorrectOtp = await UserServices.verifyOtp(
+      data.mobile,
+      data.oldPassword,
+      data.otp
+    );
     if (!isCorrectOtp) {
-      return res.status(400).json({ message: "Invalid or expired OTP" });
+      return res
+        .status(400)
+        .json({ message: "Invalid OTP/Password or expired OTP" });
     }
     const user = await UserServices.updatePassword(
       data.mobile,

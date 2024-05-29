@@ -19,6 +19,9 @@ export const createUserSchema = z.object({
 
 export const verifyOtpSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long" }),
   otp: z.string().min(6, { message: "Invalid OTP" }),
 });
 
@@ -46,6 +49,9 @@ export const changePasswordSchema = z.object({
     .min(8, { message: "Mobile number must be at least 8 characters long" })
     .max(16, { message: "Mobile number must be less than 16 characters" }),
   otp: z.string().min(6, { message: "Invalid OTP" }),
+  oldPassword: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long" }),
   newPassword: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long" }),

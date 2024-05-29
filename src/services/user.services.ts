@@ -31,25 +31,31 @@ export const generateToken = (user: User) => {
   });
 };
 
-export const verifyOtp = async (query: string, otp: string) => {
+export const verifyOtp = async (
+  query: string,
+  password: string,
+  otp: string
+) => {
   const user = await UserModel.findOne({
     $or: [{ email: query }, { mobile: query }],
   });
-  if (
-    !user ||
-    user.otp !== otp ||
-    !user.otpExpireTime ||
-    user.otpExpireTime.getTime() < Date.now()
-  ) {
-    return false;
-  }
+  if (!user) return false;
+  const isValidOtp =
+    user.otp === otp &&
+    user.otpExpireTime &&
+    user.otpExpireTime.getTime() > Date.now();
+  const isValidPassword = await bcrypt.compare(password, user.password);
+  if (!isValidOtp || !isValidPassword) return false;
   return true;
 };
 
 export const verifyAccount = async (email: string) => {
   const user = await UserModel.findOneAndUpdate(
     { email },
-    { isVerified: true, otp: undefined, otpExpireTime: undefined },
+    {
+      $set: { isVerified: true },
+      $unset: { otp: "", otpExpireTime: "" },
+    },
     { new: true }
   );
   return user;
@@ -90,9 +96,14 @@ export const updateUserOtp = async (
 };
 
 export const updatePassword = async (mobile: string, password: string) => {
+  const salt = await bcrypt.genSalt(10);
+  let hashedPassword = await bcrypt.hash(password, salt);
   const user = await UserModel.findOneAndUpdate(
     { mobile },
-    { password, otp: undefined, otpExpireTime: undefined },
+    {
+      $set: { password: hashedPassword },
+      $unset: { otp: "", otpExpireTime: "" },
+    },
     { new: true }
   );
   return user;
