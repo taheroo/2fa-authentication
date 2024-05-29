@@ -5,6 +5,9 @@ import { JWT_SECRET } from "../constants";
 
 export const createUser = async (user: User) => {
   user.mobile = user.mobile.trim();
+  // Hash the plain text password before saving
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
   const newUser = new UserModel(user);
   await newUser.save();
   return newUser;
@@ -63,6 +66,10 @@ export const verifyLogin = async (email: string, password: string) => {
 };
 
 export const updateUser = async (userId: string, data: Partial<User>) => {
+  if (data.password) {
+    const salt = await bcrypt.genSalt(10);
+    data.password = await bcrypt.hash(data.password, salt);
+  }
   const user = await UserModel.findOneAndUpdate({ _id: userId }, data, {
     new: true,
   });

@@ -11,9 +11,9 @@ import {
   verifyOtpSchema,
 } from "../validations/user.validations";
 import logger from "../services/logger";
-import UserModel from "../models/user.models";
 import { sendOtp } from "../services/twilio";
 
+// TODO: improve data validation
 export const createUser = async (req: Request, res: Response) => {
   try {
     const { error, data } = createUserSchema.safeParse(req.body);
@@ -25,6 +25,7 @@ export const createUser = async (req: Request, res: Response) => {
       data.mobile.trim()
     );
     if (user && !user.isVerified) {
+      // TODO: custom error codes
       return res
         .status(409)
         .send(
@@ -88,7 +89,7 @@ export const verifyOtp = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
+// TODO: implement 2fa correctly
 export const login = async (req: Request, res: Response) => {
   try {
     const { data, error } = loginSchema.safeParse(req.body);
