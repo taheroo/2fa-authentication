@@ -25,12 +25,11 @@ export const createUser = async (req: Request, res: Response) => {
       data.mobile.trim()
     );
     if (user && !user.isVerified) {
-      // TODO: custom error codes
-      return res
-        .status(409)
-        .send(
-          "A user with the same email/mobile already exists. Please verify your account."
-        );
+      return res.status(409).send({
+        code: 11000,
+        message:
+          "A user with the same email/mobile already exists. Please verify your account.",
+      });
     }
     if (user) {
       return res
@@ -56,7 +55,7 @@ export const createUser = async (req: Request, res: Response) => {
     logger.info("Creating user", { body: req.body });
     const result = await UserServices.createUser(data);
     if (!result.otp) {
-      return res.status(500).send("Error while creating user");
+      return res.status(500).send("Invalid mobile number");
     }
     res.status(201).send("User created successfully");
   } catch (error) {

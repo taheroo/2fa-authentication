@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { mobileSchema } from "./mobile.validations";
 
 export const createUserSchema = z.object({
   name: z
@@ -6,10 +7,7 @@ export const createUserSchema = z.object({
     .min(1, { message: "Name is required" })
     .max(255, { message: "Name must be less than 255 characters" }),
   email: z.string().email({ message: "Invalid email address" }),
-  mobile: z
-    .string()
-    .min(8, { message: "Mobile number must be at least 8 characters long" })
-    .max(16, { message: "Mobile number must be less than 16 characters" }),
+  mobile: mobileSchema,
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long" }),
@@ -37,10 +35,7 @@ export const updateUserSchema = z.object({
 
 export const requestOtpSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
-  mobile: z
-    .string()
-    .min(8, { message: "Mobile number must be at least 8 characters long" })
-    .max(16, { message: "Mobile number must be less than 16 characters" }),
+  mobile: mobileSchema,
 });
 
 export const changePasswordSchema = z.object({
